@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { Author } from "../../model/author.model";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { CreateAuthorForm } from "./CreateAuthorForm";
+import { Notifier } from "../../util/notifier";
 
 export const AuthorMainPage = () => {
 
     const [authors, setAuthors] = useState<Author[]>([]);
-    const [update, setUpdate] = useState(0);
+    const [update, setUpdate] = useState('');
     const BASE_API_URL = "http://localhost:3000/api/authors";
 
     useEffect(() => {
@@ -24,11 +25,15 @@ export const AuthorMainPage = () => {
 
         }).then(respone => {
             console.log(`Author is deleted ${respone.status}`);
-            setUpdate(id);
+            setUpdate(`${id}`);
         })
             .catch(error => {
                 console.log(error.message);
             })
+    }
+
+    const notify: Notifier = function (): void {
+        setUpdate(crypto.randomUUID().toString());
     }
 
     return (
@@ -62,7 +67,9 @@ export const AuthorMainPage = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <CreateAuthorForm />
+            <CreateAuthorForm
+                notify={notify}
+            />
         </>
     )
 }

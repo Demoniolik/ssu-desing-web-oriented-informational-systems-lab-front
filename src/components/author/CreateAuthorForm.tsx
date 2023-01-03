@@ -1,77 +1,69 @@
-import { BottomNavigation, Button, FormControl, MenuItem, Select, TextField } from "@material-ui/core"
+import { BottomNavigation, Button, FormControl, MenuItem, Select, TextField } from "@material-ui/core";
+import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
-import { useEffect, useState } from "react"
-import { Author } from "../../model/author.model";
+import { Notifier } from "../../util/notifier";
 
-export const CreateAuthorForm = () => {
+type CreateAuthorProps = {
+    notify: Notifier,
+}
 
-    const [authors, setAuthors] = useState<Author[]>([]);
-    const [authorSelect, setAuthorSelect] = useState("");
+type FormValues = {
+    firstName: string,
+    lastName: string,
+    country: string,
+}
+
+
+export const CreateAuthorForm = ({ notify }: CreateAuthorProps) => {
+
     const BASE_API_URL = "http://localhost:3000/api/authors";
 
-    useEffect(() => {
-        //TODO: use props authors instead of request
-        axios.get(BASE_API_URL, {})
-            .then(response => {
-                const authors = response.data;
-                setAuthors(authors);
-            });
-    }, []);
-
-    const handleSelectChange = (event: any) => {
-        setAuthorSelect(event.target.value as string);
-    }
-
-    const handleFormSubmit = (event: any) => {
-
-    }
+    const { register, handleSubmit } = useForm<FormValues>();
+    const onSubmit: SubmitHandler<FormValues> = (data) => {
+        console.log(data);
+        const { firstName, lastName, country } = data;
+        axios.post(BASE_API_URL, {
+            firstName,
+            lastName,
+            country,
+        }).then(_response => {
+            notify();
+        });
+    };;
 
     return (
         <>
             <BottomNavigation style={{ position: "relative", marginTop: "5%" }}>
-                <FormControl>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <TextField
-                        id="title"
-                        label="Title"
+                        {...register("firstName")}
+                        id="firstName"
+                        name="firstName"
+                        label="First name"
                         variant="outlined"
                         style={{ marginBottom: "5%" }}
                     />
                     <TextField
-                        id="description"
-                        label="Description"
+                        {...register("lastName")}
+                        id="lastName"
+                        name="lastName"
+                        label="Last name"
                         variant="outlined"
                         style={{ marginBottom: "5%" }}
                     />
                     <TextField
-                        id="amountOfPages"
-                        label="Amount of pages"
+                        {...register("country")}
+                        id="country"
+                        name="country"
+                        label="Country"
                         variant="outlined"
                         style={{ marginBottom: "5%" }}
                     />
-                    <Select
-                        id="authors"
-                        label="Authors"
-                        value={authorSelect}
-                        onChange={handleSelectChange}
-                    >
-                        {
-                            authors.map(author => (
-                                <MenuItem
-                                    key={author.id}
-                                    value={`${author.firstName} ${author.lastName}`}
-                                >{`${author.firstName} ${author.lastName}`}</MenuItem>
-                            ))
-                        }
-
-                    </Select>
-
-                    {/* TODO: Add DateTimePicker, number input, */}
 
                     <Button
-                        variant="outlined"
-                        onClick={handleFormSubmit}
-                    >Add author</Button>
-                </FormControl>
+                        type="submit"
+                        variant="outlined">Add author</Button>
+                </form>
             </BottomNavigation>
         </>
     )

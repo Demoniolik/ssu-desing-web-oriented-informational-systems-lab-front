@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { Book } from '../../model/book.model';
+import { Notifier } from '../../util/notifier';
+import { CreateBookForm } from './CreateBookForm';
 
 export const BookMainPage = () => {
 
     const [books, setBooks] = useState<Book[]>([]);
-    const [update, setUpdate] = useState(0);
+    const [update, setUpdate] = useState('');
     const BASE_API_URL = "http://localhost:3000/api/books";
 
     useEffect(() => {
@@ -23,11 +25,15 @@ export const BookMainPage = () => {
 
         }).then(respone => {
             console.log(`Books is deleted ${respone.status}`);
-            setUpdate(id);
+            setUpdate(`${id}`);
         })
             .catch(error => {
                 console.log(error.message);
             })
+    }
+
+    const notify: Notifier = function (): void {
+        setUpdate(crypto.randomUUID().toString());
     }
 
     return (
@@ -68,6 +74,9 @@ export const BookMainPage = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <CreateBookForm
+                notify={notify}
+            />
         </>
     )
 }
