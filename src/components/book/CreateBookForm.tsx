@@ -20,7 +20,6 @@ type CreateBookFormProps = {
 
 export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
 
-    const [authorSelect, setAuthorSelect] = useState('');
     const [authors, setAuthors] = useState<Author[]>([]);
 
     const AUTHORS_BASE_API_URL = "http://localhost:3000/api/authors";
@@ -45,15 +44,13 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
             frontCover,
             authorId,
             datePublished,
-            amountOfPages
+            amountOfPages,
         }).then(_response => {
             notify();
+        }).catch(error => {
+            console.log(error.message);
         });
-    };;
-
-    const handleSelectChange = (event: any) => {
-        setAuthorSelect(event.target.value as string);
-    }
+    };
 
     return (
         <>
@@ -63,7 +60,7 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                         {...register("title")}
                         id="title"
                         name="title"
-                        label="First name"
+                        label="Title"
                         variant="outlined"
                         style={{ marginBottom: "5%" }}
                     />
@@ -71,7 +68,7 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                         {...register("description")}
                         id="description"
                         name="description"
-                        label="Last name"
+                        label="Descripton"
                         variant="outlined"
                         style={{ marginBottom: "5%" }}
                     />
@@ -79,7 +76,7 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                         {...register("amountOfPages")}
                         id="amountOfPages"
                         name="amountOfPages"
-                        label="amountOfPages"
+                        label="Amount of pages"
                         variant="outlined"
                         type="number"
                         style={{ marginBottom: "5%" }}
@@ -89,29 +86,43 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                         {...register("datePublished")}
                         id="datePublished"
                         name="datePublished"
-                        // label="datePublished"
+                        label="Date published"
                         variant="outlined"
                         type="date"
                         style={{ marginBottom: "5%" }}
                     />
                     <br />
-                    <Select
-                        id="authors"
-                        label="Authors"
-                        name="authorId"
-                        value={authorSelect}
-                        onChange={handleSelectChange}
+                    <TextField
+                        {...register("frontCover")}
+                        id="frontCover"
+                        name="frontCover"
+                        label="Front cover"
+                        variant="outlined"
+                        style={{ marginBottom: "5%" }}
+                    />
+
+                    <TextField
+                        {...register("authorId")}
+                        select
+                        variant="outlined"
                     >
                         {
                             authors.map(author => (
-                                <MenuItem
-                                    key={author.id}
-                                    value={author.id}
-                                >{`${author.firstName} ${author.lastName}`}</MenuItem>
+                                <MenuItem key={author.id} value={author.id}>{`${author.firstName}  ${author.lastName}`}</MenuItem>
                             ))
                         }
+                    </TextField>
 
-                    </Select>
+                    {/* <select
+                        {...register("authorId")}
+                    >
+                        {
+                            authors.map(author => (
+                                <option value={author.id}>{`${author.firstName}  ${author.lastName}`}</option>
+                            ))
+                        }
+                    </select> */}
+
                     <br />
                     <Button
                         type="submit"

@@ -61,7 +61,7 @@ export const BookMainPage = () => {
                                     </TableCell>
                                     <TableCell align="left">{book.title}</TableCell>
                                     <TableCell align="left">{book.description.substring(0, 15) + "..."}</TableCell>
-                                    <TableCell align="left">{`${book.datePublished}`}</TableCell>
+                                    <TableCell align="left">{new Date(book.datePublished).toDateString()}</TableCell>
                                     <TableCell align="left">{`${book.author.firstName} ${book.author.lastName}`}</TableCell>
                                     <TableCell align='left'>{book.amountOfPages}</TableCell>
                                     <TableCell
