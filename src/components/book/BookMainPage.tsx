@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { Book } from '../../model/book.model';
 import { Notifier } from '../../util/notifier';
 import { CreateBookForm } from './CreateBookForm';
+import { CancelOutlined } from '@material-ui/icons';
+import { SearchBookInput } from './SearchAuthor';
+import { SubmitHandler } from 'react-hook-form';
 
 export const BookMainPage = () => {
 
@@ -36,9 +39,24 @@ export const BookMainPage = () => {
         setUpdate(crypto.randomUUID().toString());
     }
 
+    const search: SubmitHandler<any> = ({ title }) => {
+        console.log(`${BASE_API_URL}/${title}`)
+        axios.get(`${BASE_API_URL}/${title}`, {})
+            .then(response => {
+                const book: any[] = response.data;
+                console.log(book);
+                setBooks(book);
+            });
+    }
+
     return (
         <>
             <h2>Books</h2>
+
+            <SearchBookInput
+                search={search}
+            />
+
             <TableContainer style={{ width: "70%", margin: "0 auto" }}>
                 <Table size="medium">
                     <TableHead>
@@ -67,7 +85,11 @@ export const BookMainPage = () => {
                                     <TableCell
                                         align='center'
                                         onClick={() => removeBookById(book.id)}
-                                    >X</TableCell>
+                                    >
+                                        <IconButton>
+                                            <CancelOutlined />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         }

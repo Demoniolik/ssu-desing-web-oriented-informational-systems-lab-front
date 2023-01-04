@@ -29,7 +29,7 @@ export const CreateAuthorForm = ({ notify }: CreateAuthorProps) => {
         }).then(_response => {
             notify();
         });
-    };;
+    };
 
     return (
         <>

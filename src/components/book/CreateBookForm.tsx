@@ -86,7 +86,6 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                         {...register("datePublished")}
                         id="datePublished"
                         name="datePublished"
-                        label="Date published"
                         variant="outlined"
                         type="date"
                         style={{ marginBottom: "5%" }}
@@ -112,16 +111,6 @@ export const CreateBookForm = ({ notify }: CreateBookFormProps) => {
                             ))
                         }
                     </TextField>
-
-                    {/* <select
-                        {...register("authorId")}
-                    >
-                        {
-                            authors.map(author => (
-                                <option value={author.id}>{`${author.firstName}  ${author.lastName}`}</option>
-                            ))
-                        }
-                    </select> */}
 
                     <br />
                     <Button

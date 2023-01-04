@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Author } from "../../model/author.model";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 import { CreateAuthorForm } from "./CreateAuthorForm";
 import { Notifier } from "../../util/notifier";
+import { CancelOutlined } from "@material-ui/icons";
 
 export const AuthorMainPage = () => {
 
@@ -36,6 +37,7 @@ export const AuthorMainPage = () => {
         setUpdate(crypto.randomUUID().toString());
     }
 
+
     return (
         <>
             <h2>Authors</h2>
@@ -60,7 +62,11 @@ export const AuthorMainPage = () => {
                                         align='center'
                                         style={{ cursor: "pointer" }}
                                         onClick={() => removeAuthorById(author.id)}
-                                    >X</TableCell>
+                                    >
+                                        <IconButton>
+                                            <CancelOutlined />
+                                        </IconButton>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         }
